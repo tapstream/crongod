@@ -1,0 +1,21 @@
+-------------------------
+Error during supervised task!
+-------------------------
+Cmd: $cmd
+Return code: $return_code
+Start time: $start_time
+End time: $stop_time
+Total run time: $run_time
+Timeout: $timeout
+Timeline:
+$timeline
+-------------------------
+
+***STDOUT***:
+$stdout
+
+***STDERR***:
+$stderr
+
+***TRACE***:
+$trace
