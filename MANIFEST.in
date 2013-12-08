@@ -1,1 +1,3 @@
-include error-template
+include crongod/error-template
+include LICENSE
+include README.md
