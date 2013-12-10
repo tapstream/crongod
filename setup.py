@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='crongod',
-    version='0.2.0',
+    version='0.2.1',
     url='http://github.com/tapstream/crongod',
     author='Nick Sitarz',
     author_email='nsitarz@gmail.com',

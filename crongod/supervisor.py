@@ -1,3 +1,4 @@
+import uuid
 import subprocess
 import re
 import logging
@@ -25,6 +26,7 @@ def build_ps4_trace_pattern():
 class SupervisedTask(object):
 
     def __init__(self, name, cmd, args=tuple(), timeout=None, template=None, trace_pattern=None):
+        self.id = uuid.uuid4()
         self.state = 'INITIAL'
         self.name = name
         self.cmd = cmd
