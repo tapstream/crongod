@@ -1,8 +1,10 @@
 from setuptools import setup
 
+from crongod import __version__
+
 setup(
     name='crongod',
-    version='0.2.2',
+    version=__version__,
     url='http://github.com/tapstream/crongod',
     author='Nick Sitarz',
     author_email='nsitarz@gmail.com',

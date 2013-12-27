@@ -12,6 +12,7 @@ from . import supervisor
 from . import reporting
 from . import locking
 
+import crongod
 
 logger = logging.getLogger(__name__)
 
@@ -46,11 +47,12 @@ def _build_lock_factory(config):
 
 def supervise_single_task():
     parser = argparse.ArgumentParser(
-        description='CRON supervisor',)
+        description='crongod (%s)' % crongod.__version__,)
 
     parser.add_argument('cmd', help='the command to supervise')
     parser.add_argument('args', help='optional args to cmd', nargs=argparse.REMAINDER)
     parser.add_argument('--name', required=True)
+    parser.add_argument('--version')
     parser.add_argument('--log-level', default='error', choices=('debug', 'info', 'warning', 'error', 'critial'))
     parser.add_argument('--timeout', default=None, type=int, help='command timeout in seconds')
 
