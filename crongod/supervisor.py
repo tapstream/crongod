@@ -1,3 +1,5 @@
+import os
+import signal
 import uuid
 import subprocess
 import re
@@ -53,27 +55,34 @@ class SupervisedTask(object):
     def __repr__(self):
         return '<SupervisedTask cmd="{0.cmd}" state="{0.state}">'.format(self)
 
+    def pid(self):
+        if not self.process:
+            return
+        return self.process.pid
+
     def start(self):
         logger.debug('Starting task %r', self)
         self.process = subprocess.Popen(
             args=[self.cmd] + self.args,
+            preexec_fn=os.setpgrp,
             stdout=self.stdout,
             stderr=self.stderr)
         self.start_time = datetime.utcnow()
-        self.add_action('task started')
+        self.add_action('task started (PID %s)' % self.pid())
+        logger.debug('task started (PID %s)' % self.pid())
         self.state = 'STARTED'
 
     def terminate(self):
         logger.debug("Terminating task %r", self)
         self.state = 'TERMINATED'
         self.add_action('forceful termination')
-        self.process.terminate()
+        os.killpg(self.process.pid, signal.SIGTERM)
 
     def kill(self):
         logger.warn("Killing task %r", self)
         self.state = 'KILLED'
         self.add_action('forceful kill')
-        self.process.kill()
+        os.killpg(self.process.pid, signal.SIGKILL)
 
     def poll(self):
         logger.debug("Polling task %r", self)

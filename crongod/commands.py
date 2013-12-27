@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os
 import sys
 import logging
 import argparse
@@ -83,7 +82,7 @@ def supervise_single_task():
     logger.debug('Acquiring lock %s', lock)
     if not lock.acquire():
         logger.debug('Lock %s already acquired and blocking is disabled', lock)
-        return errno.EWOULDBLOCK
+        sys.exit(errno.EWOULDBLOCK)
 
     try:
         task = supervisor.SupervisedTask(name=config.name, cmd=config.cmd, args=config.args, timeout=config.timeout)
