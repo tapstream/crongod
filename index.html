@@ -48,45 +48,45 @@
 </ul><h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<div class="highlight highlight-bash"><pre>usage: crongod <span class="o">[</span>-h<span class="o">]</span> --name NAME <span class="o">[</span>--version VERSION<span class="o">]</span>
-               <span class="o">[</span>--log-level <span class="o">{</span>debug,info,warning,error,critial<span class="o">}]</span>
-               <span class="o">[</span>--timeout TIMEOUT<span class="o">]</span> <span class="o">[</span>--lock-type <span class="o">{</span>file,redis,none<span class="o">}]</span>
-               <span class="o">[</span>--lock-blocking<span class="o">]</span> <span class="o">[</span>--lock-prefix LOCK_PREFIX<span class="o">]</span>
-               <span class="o">[</span>--redis-host REDIS_HOST<span class="o">]</span> <span class="o">[</span>--redis-port REDIS_PORT<span class="o">]</span>
-               <span class="o">[</span>--redis-db REDIS_DB<span class="o">]</span> <span class="o">[</span>--redis-key REDIS_KEY<span class="o">]</span>
+<pre><code>usage: crongod [-h] --name NAME [--version VERSION]
+               [--log-level {debug,info,warning,error,critial}]
+               [--timeout TIMEOUT] [--lock-type {file,redis,none}]
+               [--lock-blocking] [--lock-prefix LOCK_PREFIX]
+               [--redis-host REDIS_HOST] [--redis-port REDIS_PORT]
+               [--redis-db REDIS_DB] [--redis-key REDIS_KEY]
                cmd ...
-</pre></div>
+</code></pre>
 
 <h2>
 <a name="usage-examples" class="anchor" href="#usage-examples"><span class="octicon octicon-link"></span></a>Usage examples</h2>
 
 <p>Consider a Bash script called <code>example.sh</code>:</p>
 
-<div class="highlight highlight-bash"><pre><span class="c">#! /bin/bash</span>
-<span class="nb">set</span> -eux
-<span class="nb">echo</span> <span class="s2">"Hello!"</span>
+<pre><code>#! /bin/bash
+set -eux
+echo "Hello!"
 sleep 10
-<span class="nb">echo</span> <span class="s2">"All done."</span>
+echo "All done."
 
-<span class="nb">exit </span>1
-</pre></div>
+exit 1
+</code></pre>
 
 <h3>
 <a name="enforced-timeouts" class="anchor" href="#enforced-timeouts"><span class="octicon octicon-link"></span></a>Enforced timeouts</h3>
 
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>crongod --name <span class="nb">test</span> --timeout 5 ./example.sh
+<pre><code>$ crongod --name test --timeout 5 ./example.sh
 
 -------------------------
 Error during supervised task!
 -------------------------
 Cmd: ./example.sh
 Return code: -15
-Start <span class="nb">time</span>: 2013-12-31 01:55:29.780062
-End <span class="nb">time</span>: 2013-12-31 01:55:36.000220
-Total run <span class="nb">time</span>: 0:00:06.220158
+Start time: 2013-12-31 01:55:29.780062
+End time: 2013-12-31 01:55:36.000220
+Total run time: 0:00:06.220158
 Timeout: 0:00:05
 Timeline:
-  * 2013-12-31 01:55:29.780244 - task started <span class="o">(</span>PID 18901<span class="o">)</span>
+  * 2013-12-31 01:55:29.780244 - task started (PID 18901)
   * 2013-12-31 01:55:34.998966 - timed out
   * 2013-12-31 01:55:34.999019 - forceful termination
   * 2013-12-31 01:55:36.000234 - task stopped
@@ -100,42 +100,42 @@ Hello!
 
 
 ***TRACE***:
-+ <span class="nb">echo</span> <span class="s1">'Hello!'</span>
++ echo 'Hello!'
 + sleep 10
-</pre></div>
+</code></pre>
 
 <h3>
 <a name="exceptional-return-codes" class="anchor" href="#exceptional-return-codes"><span class="octicon octicon-link"></span></a>Exceptional return codes</h3>
 
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>crongod --name <span class="nb">test</span> ./example.sh
+<pre><code>$ crongod --name test ./example.sh
 -------------------------
 Error during supervised task!
 -------------------------
 Cmd: ./example.sh
 Return code: 1
-Start <span class="nb">time</span>: 2013-12-31 01:56:26.390580
-End <span class="nb">time</span>: 2013-12-31 01:56:56.561805
-Total run <span class="nb">time</span>: 0:00:10.171225
+Start time: 2013-12-31 01:56:26.390580
+End time: 2013-12-31 01:56:56.561805
+Total run time: 0:00:10.171225
 Timeout: None
 Timeline:
-  * 2013-12-31 01:56:26.390895 - task started <span class="o">(</span>PID 18915<span class="o">)</span>
+  * 2013-12-31 01:56:26.390895 - task started (PID 18915)
   * 2013-12-31 01:56:56.561828 - task stopped
 -------------------------
 
 ***STDOUT***:
 Hello!
-All <span class="k">done</span>.
+All done.
 
 
 ***STDERR***:
 
 
 ***TRACE***:
-+ <span class="nb">echo</span> <span class="s1">'Hello!'</span>
++ echo 'Hello!'
 + sleep 10
-+ <span class="nb">echo</span> <span class="s1">'All done.'</span>
-+ <span class="nb">exit </span>1
-</pre></div>
++ echo 'All done.'
++ exit 1
+</code></pre>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/tapstream">tapstream</a></p>
