@@ -1,3 +1,4 @@
+import socket
 import json
 from datetime import datetime, timedelta
 import logging
@@ -27,3 +28,19 @@ class LogstashRedisClient(object):
             self.redis.lpush(self.key, self.encoder.encode(kwargs))
         except Exception:
             logger.exception('Failed to send record to logstash: type=%s, kwargs=%s', type, kwargs)
+
+
+class LogstashUDPClient(object):
+    def __init__(self, host='localhost', port=5455):
+        self.host = host
+        self.port = port
+        self.encoder = LogstashJSONEncoder()
+        self.sock = socket.socket(
+            socket.AF_INET,
+            socket.SOCK_DGRAM)
+
+
+    def record(self, type, **kwargs):
+        kwargs['type'] = type
+        msg = self.encoder.encode(kwargs)
+        self.sock.sendto(msg, (self.host, self.port))
