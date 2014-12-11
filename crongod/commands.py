@@ -5,7 +5,6 @@ import logging
 import argparse
 import time
 import errno
-import socket
 
 import redis
 
@@ -90,7 +89,14 @@ def supervise_single_task():
     try:
         task = supervisor.SupervisedTask(name=config.name, cmd=config.cmd, args=config.args, timeout=config.timeout)
         task.start()
-        logstash.record(type='cron', host=socket.getfqdn(), action='STARTED', string_id=str(task.id), status='OK', name=task.name, cmd=task.cmd)
+
+        logstash.record(
+            action='STARTED',
+            string_id=str(task.id),
+            status='OK',
+            name=task.name,
+            cmd=task.cmd)
+
         while task.supervise():
             time.sleep(1)
         context = task.build_context()
@@ -99,7 +105,16 @@ def supervise_single_task():
             status = 'ERROR'
         else:
             status = 'OK'
-        logstash.record(type='cron', host=socket.getfqdn(), action='STOPPED', string_id=str(task.id), status=status, name=task.name, cmd=task.cmd, result=context, timeline=task.format_timeline())
+
+        logstash.record(
+            action='STOPPED',
+            string_id=str(task.id),
+            status=status,
+            name=task.name,
+            cmd=task.cmd,
+            result=context,
+            timeline=task.format_timeline())
+
         sys.exit(task.returncode())
     finally:
         lock.release()
