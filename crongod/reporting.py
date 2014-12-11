@@ -2,6 +2,7 @@ import socket
 import json
 from datetime import datetime, timedelta
 import logging
+import socket
 
 import redis
 
@@ -22,8 +23,9 @@ class LogstashRedisClient(object):
         self.key = key
         self.encoder = LogstashJSONEncoder()
 
-    def record(self, type, **kwargs):
-        kwargs['type'] = type
+    def record(self, **kwargs):
+        kwargs['type'] = 'cron'
+        kwargs['host'] = socket.getfqdn()
         try:
             self.redis.lpush(self.key, self.encoder.encode(kwargs))
         except Exception:
