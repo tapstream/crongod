@@ -20,7 +20,7 @@ setup(
     entry_points={'console_scripts': [
         'crongod = crongod.commands:supervise_single_task',
     ]},
-    install_requires=['redis>=2.8.0'],
+    install_requires=['elasticsearch>=6.0.0,<7.0.0'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',

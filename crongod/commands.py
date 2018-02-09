@@ -62,6 +62,7 @@ def supervise_single_task():
     parser.add_argument('--lock-prefix', default=None, help='The implementation dependant lock prefix')
 
     # Redis
+    parser.add_argument('--redis-enable', action='store_true')
     parser.add_argument('--redis-host', default='logstash')
     parser.add_argument('--redis-port', default=6379, type=int)
     parser.add_argument('--redis-db', default=0, type=int)
@@ -72,12 +73,6 @@ def supervise_single_task():
 
     logging.basicConfig(level=_get_log_level(config.log_level))
     logger.debug(config)
-
-    logstash = reporting.LogstashRedisClient(
-        host=config.redis_host,
-        port=config.redis_port,
-        db=config.redis_db,
-        key=config.redis_key)
 
     lock_factory = _build_lock_factory(config=config)
     lock = lock_factory.build(name=config.name)
@@ -90,13 +85,6 @@ def supervise_single_task():
         task = supervisor.SupervisedTask(name=config.name, cmd=config.cmd, args=config.args, timeout=config.timeout)
         task.start()
 
-        logstash.record(
-            action='STARTED',
-            string_id=str(task.id),
-            status='OK',
-            name=task.name,
-            cmd=task.cmd)
-
         while task.supervise():
             time.sleep(1)
         context = task.build_context()
@@ -105,15 +93,6 @@ def supervise_single_task():
             status = 'ERROR'
         else:
             status = 'OK'
-
-        logstash.record(
-            action='STOPPED',
-            string_id=str(task.id),
-            status=status,
-            name=task.name,
-            cmd=task.cmd,
-            result=context,
-            timeline=task.format_timeline())
 
         sys.exit(task.returncode())
     finally:
